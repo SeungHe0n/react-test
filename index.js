@@ -3,13 +3,15 @@ const app = express();
 const port = 3000;
 const bodyParser = require('body-parser');
 
+const config = require('./config/key');
+
 const { User } = require('./models/User');
 
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb+srv://seungheon:<password>@boilerplate.9tnx3.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', {
+mongoose.connect(config.mongoURI, {
     useNewUrlParser: true, useUnifiedTopology: true
 }).then(() => console.log('MongoDB Connected...'))
 .catch(err => console.log(err));
