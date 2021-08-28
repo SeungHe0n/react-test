@@ -58,7 +58,7 @@ userSchema.methods.comparePassword = function(plainPassword, cb) {
         if(err) return cb(err);
         cb(null, isMatch);
     });
-};
+}
 
 userSchema.methods.generateToken = function(cb) {
     var user = this;
@@ -67,6 +67,17 @@ userSchema.methods.generateToken = function(cb) {
     user.save(function(err, user){
         if(err) return cb(err);
         cb(null, user);
+    });
+}
+
+userSchema.statics.findByToken = function(token, cb) {
+    var user = this;
+
+    jwt.verify(token, 'secretToken', function(err, decoded) {
+        user.findOne({"_id": decoded, "token": token}, function(err, user) {
+            if(err) return cb(err);
+            cb(null, user);
+        });
     });
 }
 
